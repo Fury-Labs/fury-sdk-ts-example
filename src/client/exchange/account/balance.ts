@@ -11,7 +11,7 @@ import { ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
-  const subaccountBalance = await exchangeClient.accountApi.subaccountBalance(
+  const subaccountBalance = await exchangeClient.accountApi.fetchSubaccountBalance(
     subaccountId,
     denom
   );
