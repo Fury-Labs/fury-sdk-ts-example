@@ -1,6 +1,10 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
 import { ExchangeClient } from "@injectivelabs/sdk-ts";
 
+export const prettyPrint = (object: any): string => {
+  return JSON.stringify(object.toObject(), null, 2)
+}
+
 (async () => {
   const network = getNetworkInfo(Network.Testnet);
   const spotOrderHashes = ["0xbae2927fbc4fd12c70eb7f41fb69b28eeceabbad68fecf4547df7c9dba5eb816"]
@@ -16,5 +20,5 @@ import { ExchangeClient } from "@injectivelabs/sdk-ts";
     }
   );
 
-  console.log(JSON.stringify(orderStates.toObject(), null, 2))
+  console.log(prettyPrint(orderStates));
 })();
