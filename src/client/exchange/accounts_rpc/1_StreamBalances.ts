@@ -13,7 +13,7 @@ import { ExchangeClient } from "@injectivelabs/sdk-ts";
   await exchangeClient.accountStream.streamSubaccountBalance({
     subaccountId,
     callback: (subaccountBalance) => {
-      console.log(subaccountBalance.getBalance()?.toObject());
+      console.log(JSON.stringify(subaccountBalance.getBalance()?.toObject(), null, 2));
     },
     onEndCallback: (status) => {
       console.log("Stream has ended with status: " + status);

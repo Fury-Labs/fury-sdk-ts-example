@@ -16,5 +16,5 @@ import { ExchangeClient } from "@injectivelabs/sdk-ts";
     }
   );
 
-  console.log(orderStates.toObject());
+  console.log(JSON.stringify(orderStates.toObject(), null, 2))
 })();

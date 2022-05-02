@@ -11,5 +11,5 @@ import { ExchangeClient } from "@injectivelabs/sdk-ts";
     accountAddress
   );
 
-  console.log(subaccountLists.toObject());
+  console.log(JSON.stringify(subaccountLists.toObject(), null, 2));
 })();
