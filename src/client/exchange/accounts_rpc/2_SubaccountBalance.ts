@@ -1,9 +1,6 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
 import { ExchangeClient } from "@injectivelabs/sdk-ts";
-
-export const prettyPrint = (object: any): string => {
-  return JSON.stringify(object.toObject(), null, 2)
-}
+import { protoObjectToJson } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.Testnet);
@@ -19,5 +16,5 @@ export const prettyPrint = (object: any): string => {
     denom
   );
 
-  console.log(prettyPrint(subaccountBalance));
+  console.log(protoObjectToJson(subaccountBalance, {}));
 })();

@@ -1,9 +1,6 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
 import { ExchangeClient } from "@injectivelabs/sdk-ts";
-
-export const prettyPrint = (object: any): string => {
-  return JSON.stringify(object.toObject(), null, 2)
-}
+import { protoObjectToJson } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.Testnet);
@@ -21,7 +18,7 @@ export const prettyPrint = (object: any): string => {
     baseSymbol,
     quoteSymbol,
     callback: (streamPrices) => {
-      console.log(prettyPrint(streamPrices));
+      console.log(protoObjectToJson(streamPrices, {}));
     },
     onEndCallback: (status) => {
       console.log("Stream has ended with status: " + status);
