@@ -31,11 +31,11 @@ PRIVATE_KEY=
 ```
 
 3. Execute an example (optional)
-   
+
 ```bash
 yarn ts-node pathToExample
 
-## Example: yarn ts-node ./src/core/MsgBid.ts
+## Example: yarn ts-node ./src/chain/MsgBid.ts
 ```
 
 ## 📖 Documentation
