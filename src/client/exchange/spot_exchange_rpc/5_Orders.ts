@@ -1,6 +1,5 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { ExchangeClient } from "@injectivelabs/sdk-ts";
-import { SpotOrderSide, protoObjectToJson } from "@injectivelabs/sdk-ts";
+import { protoObjectToJson, SpotOrderSide, ExchangeClient } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.Testnet);
