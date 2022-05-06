@@ -1,5 +1,5 @@
 import {getNetworkInfo, Network} from "@injectivelabs/networks";
-import {DerivativeOrderSide, ExchangeClient, protoObjectToJson} from "@injectivelabs/sdk-ts";
+import {protoObjectToJson, DerivativeOrderSide, ExchangeClient} from "@injectivelabs/sdk-ts";
 
 
 (async () => {

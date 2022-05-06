@@ -21,6 +21,3 @@ import { protoObjectToJson, SpotOrderSide, ExchangeClient } from "@injectivelabs
 
   console.log(protoObjectToJson(market, {}));
 })();
-
-
-

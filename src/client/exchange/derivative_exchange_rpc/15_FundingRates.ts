@@ -25,6 +25,3 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
 
   console.log(protoObjectToJson(fundingRates, {}));
 })();
-
-
-
