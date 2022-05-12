@@ -12,6 +12,7 @@ import { protoObjectToJson, TradeExecutionSide, TradeDirection, ExchangeClient }
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const market = await exchangeClient.spotApi.fetchSpotTrades(
     {
       marketId: marketId,

@@ -12,9 +12,11 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
     limit: 10,
     key: ""
   };
+
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const market = await exchangeClient.spotApi.fetchSpotSubaccountOrdersList(
     {
       subaccountId: subaccountId,

@@ -13,6 +13,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const oraclePrice = await exchangeClient.oracleApi.fetchOraclePrice(
     {
       baseSymbol,

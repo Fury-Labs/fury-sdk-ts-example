@@ -17,6 +17,7 @@ import { protoObjectToJson, TradeDirection, TradeExecutionType, ExchangeClient }
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const subaccountTrades = await exchangeClient.derivativesApi.fetchDerivativeSubaccountTradesList(
     {
       subaccountId: subaccountId,

@@ -3,6 +3,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.Testnet);
+
   const baseSymbol = "BTC";
   const quoteSymbol = "USDT";
   const oracleType = "bandibc";

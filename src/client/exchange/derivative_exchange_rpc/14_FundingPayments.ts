@@ -16,6 +16,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const fundingPayments = await exchangeClient.derivativesApi.fetchDerivativeFundingPayments(
     {
       marketId: marketId,

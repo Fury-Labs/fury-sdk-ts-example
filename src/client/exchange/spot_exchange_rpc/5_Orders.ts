@@ -16,6 +16,7 @@ import { protoObjectToJson, SpotOrderSide, ExchangeClient } from "@injectivelabs
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const market = await exchangeClient.spotApi.fetchSpotOrders(
     {
       marketId: marketId,

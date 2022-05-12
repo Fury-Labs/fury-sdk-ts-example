@@ -7,6 +7,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const insuranceFunds = await exchangeClient.insuranceFundApi.fetchInsuranceFunds(
   );
 

@@ -17,6 +17,7 @@ import {protoObjectToJson, DerivativeOrderSide, ExchangeClient} from "@injective
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const orders = await exchangeClient.derivativesApi.fetchDerivativeOrders({
     marketId: marketId,
     subaccountId: subaccountId,
@@ -26,6 +27,3 @@ import {protoObjectToJson, DerivativeOrderSide, ExchangeClient} from "@injective
 
   console.log(protoObjectToJson(orders, {}));
 })();
-
-
-

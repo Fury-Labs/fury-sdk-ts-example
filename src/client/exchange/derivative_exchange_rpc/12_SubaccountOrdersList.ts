@@ -16,6 +16,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const subaccountOrders = await exchangeClient.derivativesApi.fetchDerivativeSubaccountOrdersList(
     {
       subaccountId: subaccountId,

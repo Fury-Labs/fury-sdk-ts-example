@@ -10,6 +10,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const market = await exchangeClient.spotApi.fetchSpotMarket(marketId);
 
   console.log(protoObjectToJson(market, {}));

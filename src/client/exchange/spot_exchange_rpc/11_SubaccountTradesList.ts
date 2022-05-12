@@ -18,6 +18,7 @@ import { protoObjectToJson, TradeExecutionType, TradeDirection, ExchangeClient }
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const market = await exchangeClient.spotApi.fetchSpotSubaccountTradesList(
     {
       subaccountId: subaccountId,

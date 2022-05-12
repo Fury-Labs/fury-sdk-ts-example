@@ -10,6 +10,7 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
   );
+
   const orderbook = await exchangeClient.derivativesApi.fetchDerivativeOrderbook(marketId);
 
   console.log(protoObjectToJson(orderbook, {}));
