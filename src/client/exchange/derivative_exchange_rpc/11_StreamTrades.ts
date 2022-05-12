@@ -8,8 +8,11 @@ import {protoObjectToJson, ExchangeClient, TradeDirection, TradeExecutionSide} f
   const subaccountIds = ["0xc6fe5d33615a1c52c08018c47e8bc53646a0e101000000000000000000000000"];
   const executionSide = TradeExecutionSide.Maker;
   const direction = TradeDirection.Buy;
-  const skip = 0;
-  const limit = 10;
+  const pagination = {
+    skip: 0,
+    limit: 10,
+    key: ""
+  };
 
   const exchangeClient = new ExchangeClient.ExchangeGrpcStreamClient(
     network.exchangeApi
@@ -21,8 +24,7 @@ import {protoObjectToJson, ExchangeClient, TradeDirection, TradeExecutionSide} f
       subaccountIds: subaccountIds,
       executionSide: executionSide,
       direction: direction,
-      skip: skip,
-      limit: limit,
+      pagination: pagination,
       callback: (streamDerivativeTrades) => {
         console.log(protoObjectToJson(streamDerivativeTrades, {}));
       },

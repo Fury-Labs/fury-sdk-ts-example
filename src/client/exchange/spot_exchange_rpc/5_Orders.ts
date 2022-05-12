@@ -4,9 +4,14 @@ import { protoObjectToJson, SpotOrderSide, ExchangeClient } from "@injectivelabs
 (async () => {
   const network = getNetworkInfo(Network.Testnet);
 
-  const marketId = "0xa508cb32923323679f29a032c70342c147c17d0145625922b0ef22e955c844c0"
-  const subaccountId = "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000"
-  const orderSide = SpotOrderSide.Buy
+  const marketId = "0xa508cb32923323679f29a032c70342c147c17d0145625922b0ef22e955c844c0";
+  const subaccountId = "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
+  const orderSide = SpotOrderSide.Buy;
+  const pagination = {
+    skip: 0,
+    limit: 10,
+    key: ""
+  };
 
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
@@ -16,6 +21,7 @@ import { protoObjectToJson, SpotOrderSide, ExchangeClient } from "@injectivelabs
       marketId: marketId,
       subaccountId: subaccountId,
       orderSide: orderSide,
+      pagination: pagination,
     }
   );
 

@@ -8,6 +8,11 @@ import { protoObjectToJson, TradeDirection, TradeExecutionType, ExchangeClient }
   const marketId = "0x4ca0f92fc28be0c9761326016b5a1a2177dd6375558365116b5bdda9abc229ce";
   const direction = TradeDirection.Buy;
   const executionType = TradeExecutionType.Market;
+  const pagination = {
+    skip: 0,
+    limit: 10,
+    key: ""
+  };
 
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
@@ -18,6 +23,7 @@ import { protoObjectToJson, TradeDirection, TradeExecutionType, ExchangeClient }
       marketId: marketId,
       direction: direction,
       executionType: executionType,
+      pagination: pagination,
     }
   );
 

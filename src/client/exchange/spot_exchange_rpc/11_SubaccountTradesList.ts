@@ -9,6 +9,11 @@ import { protoObjectToJson, TradeExecutionType, TradeDirection, ExchangeClient }
   const subaccountId = "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
   const direction = TradeDirection.Buy;
   const executionType = TradeExecutionType.Market;
+  const pagination = {
+    skip: 0,
+    limit: 10,
+    key: ""
+  };
 
   const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
     network.exchangeApi
@@ -18,7 +23,8 @@ import { protoObjectToJson, TradeExecutionType, TradeDirection, ExchangeClient }
       subaccountId: subaccountId,
       marketId: marketId,
       direction: direction,
-      executionType: executionType
+      executionType: executionType,
+      pagination: pagination,
     }
   );
 

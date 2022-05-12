@@ -17,7 +17,7 @@ import { protoObjectToJson, TradeExecutionSide, TradeDirection, ExchangeClient }
       marketId: marketId,
       subaccountId: subaccountId,
       direction: direction,
-      executionSide: executionSide
+      executionSide: executionSide,
   });
 
   console.log(protoObjectToJson(market, {}));
