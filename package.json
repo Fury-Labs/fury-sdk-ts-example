@@ -12,7 +12,7 @@
   "scripts": {},
   "dependencies": {
     "@injectivelabs/networks": "^0.5.6",
-    "@injectivelabs/sdk-ts": "^0.0.33",
+    "@injectivelabs/sdk-ts": "^0.0.36",
     "@injectivelabs/ts-types": "^0.5.1",
     "dotenv": "^16.0.0"
   },

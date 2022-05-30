@@ -1,17 +1,18 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
+import { protoObjectToJson } from "@injectivelabs/sdk-ts";
+import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
 
 (async () => {
-  const network = getNetworkInfo(Network.Testnet);
+  const network = getNetworkInfo(Network.TestnetK8s);
 
   const subaccountId = "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
-  const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
+  const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const subaccountBalancesList = await exchangeClient.accountApi.fetchSubaccountBalancesList(
+  const subaccountBalancesList = await exchangeClient.account.fetchSubaccountBalancesList(
     subaccountId
   );
 
-  console.log(protoObjectToJson(subaccountBalancesList, {}));
+  console.log(protoObjectToJson(subaccountBalancesList));
 })();

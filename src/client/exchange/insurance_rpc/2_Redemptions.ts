@@ -1,18 +1,19 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
+import { protoObjectToJson } from "@injectivelabs/sdk-ts";
+import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
 
 (async () => {
-  const network = getNetworkInfo(Network.Testnet);
+  const network = getNetworkInfo(Network.TestnetK8s);
 
   const denom = "share2";
   const address = "inj1gxqdj76ul07w4ujsl8403nhhzyvug2h66qk057";
   const status = "disbursed";
 
-  const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
+  const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const redemptions = await exchangeClient.insuranceFundApi.fetchRedemptions(
+  const redemptions = await exchangeClient.insuranceFund.fetchRedemptions(
     {
       denom,
       address,
@@ -20,5 +21,5 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
     }
   );
 
-  console.log(protoObjectToJson(redemptions, {}))
+  console.log(protoObjectToJson(redemptions))
 })();

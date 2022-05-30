@@ -11,7 +11,7 @@ import { BigNumberInBase } from "@injectivelabs/utils";
 
 /** MsgBid Example */
 (async () => {
-  const network = getNetworkInfo(Network.Testnet);
+  const network = getNetworkInfo(Network.TestnetK8s);
   const privateKey = PrivateKey.fromPrivateKey(
     "f9db9bf330e23cb7839039e944adef6e9df447b90b503d5b4464c90bea9022f3"
   );

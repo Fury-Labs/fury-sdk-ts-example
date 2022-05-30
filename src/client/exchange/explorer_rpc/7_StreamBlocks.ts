@@ -5,17 +5,14 @@ import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/exchange-grpc-st
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
 
-  const marketIds = ["0xa508cb32923323679f29a032c70342c147c17d0145625922b0ef22e955c844c0"];
-
   const exchangeClient = new ExchangeGrpcStreamClient(
     network.exchangeApi
   );
 
-  await exchangeClient.spot.streamSpotOrderbook(
+  await exchangeClient.explorer.blocks(
     {
-      marketIds,
-      callback: (streamSpotOrderbook) => {
-        console.log(protoObjectToJson(streamSpotOrderbook));
+      callback: (streamBlocks) => {
+        console.log(protoObjectToJson(streamBlocks));
       },
       onEndCallback: (status) => {
         console.log("Stream has ended with status: " + status);

@@ -1,15 +1,16 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
+import { protoObjectToJson } from "@injectivelabs/sdk-ts";
+import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
 
 (async () => {
-  const network = getNetworkInfo(Network.Testnet);
+  const network = getNetworkInfo(Network.TestnetK8s);
 
-  const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
+  const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const insuranceFunds = await exchangeClient.insuranceFundApi.fetchInsuranceFunds(
+  const insuranceFunds = await exchangeClient.insuranceFund.fetchInsuranceFunds(
   );
 
-  console.log(protoObjectToJson(insuranceFunds, {}))
+  console.log(protoObjectToJson(insuranceFunds))
 })();

@@ -1,20 +1,20 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
-
+import { protoObjectToJson } from "@injectivelabs/sdk-ts";
+import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
 
 (async () => {
-  const network = getNetworkInfo(Network.Testnet);
+  const network = getNetworkInfo(Network.TestnetK8s);
 
   const baseSymbol = "BTC";
   const quoteSymbol = "USDT";
   const oracleType = "bandibc";
   const oracleScaleFactor = 6;
 
-  const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
+  const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const oraclePrice = await exchangeClient.oracleApi.fetchOraclePrice(
+  const oraclePrice = await exchangeClient.oracle.fetchOraclePrice(
     {
       baseSymbol,
       quoteSymbol,
@@ -23,5 +23,5 @@ import { protoObjectToJson, ExchangeClient } from "@injectivelabs/sdk-ts";
     }
   );
 
-  console.log(protoObjectToJson(oraclePrice, {}));
+  console.log(protoObjectToJson(oraclePrice));
 })();

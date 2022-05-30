@@ -1,9 +1,9 @@
-import {getNetworkInfo, Network} from "@injectivelabs/networks";
-import {protoObjectToJson, DerivativeOrderSide, ExchangeClient} from "@injectivelabs/sdk-ts";
-
+import { getNetworkInfo, Network } from "@injectivelabs/networks";
+import { protoObjectToJson, DerivativeOrderSide } from "@injectivelabs/sdk-ts";
+import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
 
 (async () => {
-  const network = getNetworkInfo(Network.Testnet);
+  const network = getNetworkInfo(Network.TestnetK8s);
 
   const marketId = "0x4ca0f92fc28be0c9761326016b5a1a2177dd6375558365116b5bdda9abc229ce";
   const subaccountId = "0xc6fe5d33615a1c52c08018c47e8bc53646a0e101000000000000000000000000";
@@ -14,16 +14,16 @@ import {protoObjectToJson, DerivativeOrderSide, ExchangeClient} from "@injective
     key: ""
   };
 
-  const exchangeClient = new ExchangeClient.ExchangeGrpcClient(
+  const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const orders = await exchangeClient.derivativesApi.fetchDerivativeOrders({
+  const orders = await exchangeClient.derivatives.fetchOrders({
     marketId: marketId,
     subaccountId: subaccountId,
     orderSide: orderSide,
     pagination: pagination,
   });
 
-  console.log(protoObjectToJson(orders, {}));
+  console.log(protoObjectToJson(orders));
 })();
