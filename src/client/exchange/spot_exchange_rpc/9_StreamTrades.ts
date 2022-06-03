@@ -6,9 +6,9 @@ import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/exchange-grpc-st
   const network = getNetworkInfo(Network.TestnetK8s);
 
   const marketId = "0xa508cb32923323679f29a032c70342c147c17d0145625922b0ef22e955c844c0";
-  const subaccountId = "0xc6fe5d33615a1c52c08018c47e8bc53646a0e101000000000000000000000000";
-  const direction = TradeDirection.Buy;
-  const executionSide = TradeExecutionSide.Maker;
+  const subaccountId = "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
+  const direction = TradeDirection.Sell;
+  const executionSide = TradeExecutionSide.Taker;
   const pagination = {
     skip: 0,
     limit: 10,

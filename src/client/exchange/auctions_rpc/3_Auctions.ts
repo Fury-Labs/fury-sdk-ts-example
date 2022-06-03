@@ -9,8 +9,7 @@ import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
     network.exchangeApi
   );
 
-  const ping = await exchangeClient.meta.fetchPing(
-  );
+  const auction = await exchangeClient.auction.fetchAuctions();
 
-  console.log("Health OK?", protoObjectToJson(ping))
+  console.log(protoObjectToJson(auction));
 })();

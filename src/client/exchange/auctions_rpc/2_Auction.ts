@@ -5,12 +5,13 @@ import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
 
+  const round = 19532;
+
   const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const ping = await exchangeClient.meta.fetchPing(
-  );
+  const auction = await exchangeClient.auction.fetchAuction(round);
 
-  console.log("Health OK?", protoObjectToJson(ping))
+  console.log(protoObjectToJson(auction));
 })();
