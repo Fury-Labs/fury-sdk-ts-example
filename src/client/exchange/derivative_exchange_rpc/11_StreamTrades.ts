@@ -1,6 +1,6 @@
 import {getNetworkInfo, Network} from "@injectivelabs/networks";
 import {protoObjectToJson, TradeDirection, TradeExecutionSide} from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/exchange-grpc-stream-client";
+import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcStreamClient";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);

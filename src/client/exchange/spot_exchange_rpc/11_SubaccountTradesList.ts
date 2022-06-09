@@ -1,6 +1,6 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
 import { protoObjectToJson, TradeExecutionType, TradeDirection } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/exchange-grpc-client";
+import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcClient";
 
 
 (async () => {

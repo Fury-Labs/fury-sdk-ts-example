@@ -5,18 +5,15 @@ import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/dist/client/exchange/E
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
 
-  const subaccountId =
-    "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
-  const denom = "inj";
+  const receiver = "inj1hkhdaj2a2clmq5jq6mspsggqs32vynpk228q3r"
 
   const exchangeClient = new ExchangeGrpcClient(
     network.exchangeApi
   );
 
-  const subaccountBalance = await exchangeClient.account.fetchSubaccountBalance(
-    subaccountId,
-    denom
-  );
+  const tx = await exchangeClient.explorer.fetchIBCTransferTxs({
+    receiver: receiver,
+  });
 
-  console.log(protoObjectToJson(subaccountBalance));
+  console.log(protoObjectToJson(tx));
 })();
