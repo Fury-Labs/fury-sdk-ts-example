@@ -16,28 +16,15 @@ $ cd injective-sdk-ts-example
 $ yarn
 ```
 
-2. Duplicate the .env.example to .env and fill the values
 
-```bash
-## ChainId should be 1 for mainnet, 42 for testnet
-CHAIN_ID=42
-
-### Used to fetch predefined endpoints for our sentry nodes, can be
-### public (mainnet) or testnet (testnet)
-NETWORK=testnet
-
-### Account's private key used for signing
-PRIVATE_KEY=
-```
-
-3. Execute an example (optional)
+2. Execute an example (optional)
 
 ```bash
 yarn ts-node pathToExample
 
 ## Example: yarn ts-node ./src/chain/MsgBid.ts
 ```
-
+ 
 ## 📖 Documentation
 
 ---
