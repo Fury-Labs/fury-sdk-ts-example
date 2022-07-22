@@ -1,17 +1,16 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/exchange-grpc-stream-client"
+import { ExchangeGrpcAuctionStream } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
 
-  const exchangeClient = new ExchangeGrpcStreamClient(
+  const exchangeGrpcAuctionStream = new ExchangeGrpcAuctionStream(
     network.exchangeApi
   );
 
-  await exchangeClient.auction.streamBids({
-    callback: (streamBids) => {
-      console.log(protoObjectToJson(streamBids));
+  await exchangeGrpcAuctionStream.streamBids({
+    callback: (streamBidsResponse) => {
+      console.log(streamBidsResponse);
     },
     onEndCallback: (status) => {
       console.log("Stream has ended with status: " + status);

@@ -1,16 +1,15 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { ChainRestAuthApi, ChainGrpcAuctionApi } from "@injectivelabs/sdk-ts";
+import { ChainRestAuthApi, MsgExecuteContract } from "@injectivelabs/sdk-ts";
 import { PrivateKey } from "@injectivelabs/sdk-ts/dist/local";
 import {
   privateKeyToPublicKeyBase64,
-  MsgBid,
   DEFAULT_STD_FEE,
 } from "@injectivelabs/sdk-ts";
 import { createTransaction } from "@injectivelabs/tx-ts";
 import { TxService, TxClient } from "@injectivelabs/tx-ts/dist/client";
 import { BigNumberInBase } from "@injectivelabs/utils";
 
-/** MsgBid Example */
+/** MsgSend Example */
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
   const privateKeyHash =
@@ -27,21 +26,30 @@ import { BigNumberInBase } from "@injectivelabs/utils";
   ).fetchAccount(injectiveAddress);
 
   /** Prepare the Message */
-  const auctionModuleState = await new ChainGrpcAuctionApi(
-    network.sentryGrpcApi
-  ).fetchModuleState();
-  const latestRound = auctionModuleState.auctionRound;
-  const round = latestRound || 1;
-  const bid = 1; /** 1 INJ */
   const amount = {
-    amount: new BigNumberInBase(bid).toWei().toFixed(),
+    amount: new BigNumberInBase(0.0001).toWei().toFixed(),
     denom: "inj",
   };
 
-  const msg = MsgBid.fromJSON({
-    round,
-    amount,
-    injectiveAddress,
+  const msg = MsgExecuteContract.fromJSON({
+    contractAddress: "inj1q0e70vhrv063eah90mu97sazhywmeegp7myvnh",
+    sender: injectiveAddress,
+    msg: {
+      create_asset_meta: {
+        // eslint-disable-next-line no-constant-condition
+        asset_info: true
+          ? {
+              native_token: { denom: "inj" },
+            }
+          : {
+              token: {
+                contract_addr: "inj",
+              },
+            },
+        nonce: 69,
+      },
+    },
+    amount: amount,
   });
 
   /** Prepare the Transaction **/

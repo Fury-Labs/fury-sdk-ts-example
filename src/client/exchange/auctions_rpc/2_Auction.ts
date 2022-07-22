@@ -1,17 +1,15 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcClient";
+import { ExchangeGrpcAuctionApi } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
-
-  const round = 19532;
-
-  const exchangeClient = new ExchangeGrpcClient(
+  const exchangeGrpcAuctionApi = new ExchangeGrpcAuctionApi(
     network.exchangeApi
   );
 
-  const auction = await exchangeClient.auction.fetchAuction(round);
+  const round = 19532;
 
-  console.log(protoObjectToJson(auction));
+  const auction = await exchangeGrpcAuctionApi.fetchAuction(round);
+
+  console.log(auction);
 })();
