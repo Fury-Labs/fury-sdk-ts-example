@@ -53,7 +53,7 @@ import { BigNumberInBase } from "@injectivelabs/utils";
   });
 
   /** Sign transaction */
-  const signature = await privateKey.signEcda(signBytes);
+  const signature = await privateKey.sign(signBytes);
 
   /** Append Signatures */
   txRaw.setSignaturesList([signature]);

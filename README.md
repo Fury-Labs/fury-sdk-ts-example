@@ -22,7 +22,7 @@ $ yarn
 ```bash
 yarn ts-node pathToExample
 
-## Example: yarn ts-node ./src/chain/MsgBid.ts
+## Example: yarn ts-node ./src/core/bank/MsgSend
 ```
  
 ## 📖 Documentation
