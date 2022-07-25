@@ -1,12 +1,13 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { ChainRestAuthApi, MsgExecuteContract } from "@injectivelabs/sdk-ts";
+import { ChainRestAuthApi } from "@injectivelabs/sdk-ts";
 import { PrivateKey } from "@injectivelabs/sdk-ts/dist/local";
 import {
   privateKeyToPublicKeyBase64,
+  MsgSend,
   DEFAULT_STD_FEE,
 } from "@injectivelabs/sdk-ts";
 import { createTransaction } from "@injectivelabs/tx-ts";
-import { TxService, TxClient } from "@injectivelabs/tx-ts/dist/client";
+import { TxGrpcClient, TxClient } from "@injectivelabs/tx-ts/dist/client";
 import { BigNumberInBase } from "@injectivelabs/utils";
 
 /** MsgSend Example */
@@ -27,29 +28,14 @@ import { BigNumberInBase } from "@injectivelabs/utils";
 
   /** Prepare the Message */
   const amount = {
-    amount: new BigNumberInBase(0.0001).toWei().toFixed(),
+    amount: new BigNumberInBase(0.01).toWei().toFixed(),
     denom: "inj",
   };
 
-  const msg = MsgExecuteContract.fromJSON({
-    contractAddress: "inj1q0e70vhrv063eah90mu97sazhywmeegp7myvnh",
-    sender: injectiveAddress,
-    msg: {
-      create_asset_meta: {
-        // eslint-disable-next-line no-constant-condition
-        asset_info: true
-          ? {
-              native_token: { denom: "inj" },
-            }
-          : {
-              token: {
-                contract_addr: "inj",
-              },
-            },
-        nonce: 69,
-      },
-    },
-    amount: amount,
+  const msg = MsgSend.fromJSON({
+    amount,
+    srcInjectiveAddress: injectiveAddress,
+    dstInjectiveAddress: injectiveAddress,
   });
 
   /** Prepare the Transaction **/
@@ -67,7 +53,7 @@ import { BigNumberInBase } from "@injectivelabs/utils";
   });
 
   /** Sign transaction */
-  const signature = await privateKey.sign(signBytes);
+  const signature = await privateKey.signEcda(signBytes);
 
   /** Append Signatures */
   txRaw.setSignaturesList([signature]);
@@ -75,7 +61,7 @@ import { BigNumberInBase } from "@injectivelabs/utils";
   /** Calculate hash of the transaction */
   console.log(`Transaction Hash: ${await TxClient.hash(txRaw)}`);
 
-  const txService = new TxService({
+  const txService = new TxGrpcClient({
     txRaw,
     endpoint: network.sentryGrpcApi,
   });
@@ -90,7 +76,12 @@ import { BigNumberInBase } from "@injectivelabs/utils";
 
   /** Broadcast transaction */
   const txResponse = await txService.broadcast();
-  console.log(
-    `Broadcasted transaction hash: ${JSON.stringify(txResponse.txhash)}`
-  );
+
+  if (txResponse.code !== 0) {
+    console.log(`Transaction failed: ${txResponse.rawLog}`);
+  } else {
+    console.log(
+      `Broadcasted transaction hash: ${JSON.stringify(txResponse.txhash)}`
+    );
+  }
 })();

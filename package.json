@@ -13,9 +13,9 @@
   "dependencies": {
     "@injectivelabs/contracts": "^1.0.15",
     "@injectivelabs/networks": "^1.0.7",
-    "@injectivelabs/sdk-ts": "^1.0.50",
+    "@injectivelabs/sdk-ts": "^1.0.52",
     "@injectivelabs/ts-types": "^1.0.5",
-    "@injectivelabs/tx-ts": "^1.0.12",
+    "@injectivelabs/tx-ts": "^1.0.14",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {
