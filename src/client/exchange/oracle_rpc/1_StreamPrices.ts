@@ -1,25 +1,22 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcStreamClient";
+import { ExchangeGrpcOracleStream } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
+  const exchangeGrpcOracleStream = new ExchangeGrpcOracleStream(
+    network.exchangeApi
+  );
 
   const baseSymbol = "BTC";
   const quoteSymbol = "USDT";
   const oracleType = "bandibc";
 
-  const exchangeClient = new ExchangeGrpcStreamClient(
-    network.exchangeApi
-  );
-
-  await exchangeClient.oracle.streamOraclePrices(
-    {
+  await exchangeGrpcOracleStream.streamOraclePrices({
     oracleType,
     baseSymbol,
     quoteSymbol,
     callback: (streamPrices) => {
-      console.log(protoObjectToJson(streamPrices));
+      console.log(streamPrices);
     },
     onEndCallback: (status) => {
       console.log("Stream has ended with status: " + status);

@@ -1,31 +1,28 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson, SpotOrderSide } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcClient";
+import { SpotOrderSide } from "@injectivelabs/sdk-ts";
+import { ExchangeGrpcSpotApi } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
+  const exchangeGrpcSpotApi = new ExchangeGrpcSpotApi(network.exchangeApi);
 
-  const marketId = "0xa508cb32923323679f29a032c70342c147c17d0145625922b0ef22e955c844c0";
-  const subaccountId = "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
+  const marketId =
+    "0xa508cb32923323679f29a032c70342c147c17d0145625922b0ef22e955c844c0";
+  const subaccountId =
+    "0xaf79152ac5df276d9a8e1e2e22822f9713474902000000000000000000000000";
   const orderSide = SpotOrderSide.Buy;
   const pagination = {
     skip: 0,
     limit: 10,
-    key: ""
+    key: "",
   };
 
-  const exchangeClient = new ExchangeGrpcClient(
-    network.exchangeApi
-  );
+  const market = await exchangeGrpcSpotApi.fetchOrders({
+    marketId: marketId,
+    subaccountId: subaccountId,
+    orderSide: orderSide,
+    pagination: pagination,
+  });
 
-  const market = await exchangeClient.spot.fetchOrders(
-    {
-      marketId: marketId,
-      subaccountId: subaccountId,
-      orderSide: orderSide,
-      pagination: pagination,
-    }
-  );
-
-  console.log(protoObjectToJson(market));
+  console.log(market);
 })();

@@ -1,19 +1,17 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcClient";
+import { ExchangeGrpcExplorerApi } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
-
-  const receiver = "inj1hkhdaj2a2clmq5jq6mspsggqs32vynpk228q3r"
-
-  const exchangeClient = new ExchangeGrpcClient(
+  const exchangeGrpcExplorerApi = new ExchangeGrpcExplorerApi(
     network.exchangeApi
   );
 
-  const tx = await exchangeClient.explorer.fetchPeggyDepositTxs({
+  const receiver = "inj1hkhdaj2a2clmq5jq6mspsggqs32vynpk228q3r";
+
+  const tx = await exchangeGrpcExplorerApi.fetchPeggyDepositTxs({
     receiver: receiver,
   });
 
-  console.log(protoObjectToJson(tx));
+  console.log(tx);
 })();

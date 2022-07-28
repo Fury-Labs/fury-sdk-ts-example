@@ -1,21 +1,18 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcStreamClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcStreamClient";
+import { ExchangeGrpcExplorerStream } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
-
-  const exchangeClient = new ExchangeGrpcStreamClient(
+  const exchangeGrpcExplorerStream = new ExchangeGrpcExplorerStream(
     network.exchangeApi
   );
 
-  await exchangeClient.explorer.blocks(
-    {
-      callback: (streamBlocks) => {
-        console.log(protoObjectToJson(streamBlocks));
-      },
-      onEndCallback: (status) => {
-        console.log("Stream has ended with status: " + status);
-      },
-    });
+  await exchangeGrpcExplorerStream.blocks({
+    callback: (streamBlocks) => {
+      console.log(streamBlocks);
+    },
+    onEndCallback: (status) => {
+      console.log("Stream has ended with status: " + status);
+    },
+  });
 })();

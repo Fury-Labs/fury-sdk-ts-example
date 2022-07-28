@@ -1,16 +1,11 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { protoObjectToJson } from "@injectivelabs/sdk-ts";
-import { ExchangeGrpcClient } from "@injectivelabs/sdk-ts/dist/client/exchange/ExchangeGrpcClient";
+import { ExchangeGrpcOracleApi } from "@injectivelabs/sdk-ts";
 
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
+  const exchangeGrpcOracleApi = new ExchangeGrpcOracleApi(network.exchangeApi);
 
-  const exchangeClient = new ExchangeGrpcClient(
-    network.exchangeApi
-  );
+  const oracleList = await exchangeGrpcOracleApi.fetchOracleList();
 
-  const oracleList = await exchangeClient.oracle.fetchOracleList(
-  );
-
-  console.log(protoObjectToJson(oracleList));
+  console.log(oracleList);
 })();
