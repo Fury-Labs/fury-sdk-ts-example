@@ -1,19 +1,27 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { ChainRestAuthApi } from "@injectivelabs/sdk-ts";
+import {
+  ChainRestAuthApi,
+  IndexerGrpcSpotApi,
+  MsgCreateSpotMarketOrder,
+} from "@injectivelabs/sdk-ts";
 import { PrivateKey } from "@injectivelabs/sdk-ts/dist/local";
-import { MsgSend, DEFAULT_STD_FEE } from "@injectivelabs/sdk-ts";
+import { DEFAULT_STD_FEE } from "@injectivelabs/sdk-ts";
 import { createTransaction } from "@injectivelabs/tx-ts";
 import { TxRestClient, TxClient } from "@injectivelabs/tx-ts/dist/client";
-import { BigNumberInBase } from "@injectivelabs/utils";
 import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
+import {
+  spotPriceToChainPriceToFixed,
+  spotQuantityToChainQuantityToFixed,
+} from "@injectivelabs/utils";
 
-/** MsgSend Example */
+/** MsgBatchCancelDerivativeOrders Example */
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
   const privateKeyHash =
     "f9db9bf330e23cb7839039e944adef6e9df447b90b503d5b4464c90bea9022f3";
   const privateKey = PrivateKey.fromPrivateKey(privateKeyHash);
   const injectiveAddress = privateKey.toBech32();
+  const address = privateKey.toAddress();
   const publicKey = privateKey.toPublicKey().toBase64();
 
   /** Account Details **/
@@ -22,15 +30,31 @@ import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
   ).fetchAccount(injectiveAddress);
 
   /** Prepare the Message */
-  const amount = {
-    amount: new BigNumberInBase(0.01).toWei().toFixed(),
-    denom: "inj",
-  };
+  const subaccountId = address.getSubaccountId();
+  const indexerSpotApi = new IndexerGrpcSpotApi(network.indexerApi);
+  const markets = await indexerSpotApi.fetchMarkets();
+  const injUsdtMarket = markets.find((m) => m.ticker.includes("INJ"));
 
-  const msg = MsgSend.fromJSON({
-    amount,
-    srcInjectiveAddress: injectiveAddress,
-    dstInjectiveAddress: injectiveAddress,
+  if (!injUsdtMarket) {
+    throw new Error(`The INJ/USDT market not found`);
+  }
+
+  /* 1 - buy, 2 - sell, 3 - stop_buy, 4 - stop_sell, 5 - take_buy, 6 - take_sell, 7 - buy post-only, 8 - sell post-only */
+  const orderType = 1;
+  const price = 2; /* This is the maximum price you are willing to accept for your market order */
+  const quantity = 1;
+
+  const msg = MsgCreateSpotMarketOrder.fromJSON({
+    orderType,
+    injectiveAddress,
+    price: spotPriceToChainPriceToFixed({
+      value: price,
+      quoteDecimals: 6 /* USDT has 6 decimals */,
+    }),
+    quantity: spotQuantityToChainQuantityToFixed({ value: quantity }),
+    marketId: injUsdtMarket.marketId,
+    feeRecipient: injectiveAddress,
+    subaccountId: subaccountId,
   });
 
   /** Prepare the Transaction **/

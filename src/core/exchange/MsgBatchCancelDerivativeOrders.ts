@@ -1,19 +1,25 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { ChainRestAuthApi } from "@injectivelabs/sdk-ts";
+import {
+  ChainRestAuthApi,
+  IndexerGrpcDerivativesApi,
+} from "@injectivelabs/sdk-ts";
 import { PrivateKey } from "@injectivelabs/sdk-ts/dist/local";
-import { MsgSend, DEFAULT_STD_FEE } from "@injectivelabs/sdk-ts";
+import {
+  MsgBatchCancelDerivativeOrders,
+  DEFAULT_STD_FEE,
+} from "@injectivelabs/sdk-ts";
 import { createTransaction } from "@injectivelabs/tx-ts";
 import { TxRestClient, TxClient } from "@injectivelabs/tx-ts/dist/client";
-import { BigNumberInBase } from "@injectivelabs/utils";
 import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
 
-/** MsgSend Example */
+/** MsgBatchCancelDerivativeOrders Example */
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
   const privateKeyHash =
     "f9db9bf330e23cb7839039e944adef6e9df447b90b503d5b4464c90bea9022f3";
   const privateKey = PrivateKey.fromPrivateKey(privateKeyHash);
   const injectiveAddress = privateKey.toBech32();
+  const address = privateKey.toAddress();
   const publicKey = privateKey.toPublicKey().toBase64();
 
   /** Account Details **/
@@ -22,15 +28,31 @@ import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
   ).fetchAccount(injectiveAddress);
 
   /** Prepare the Message */
-  const amount = {
-    amount: new BigNumberInBase(0.01).toWei().toFixed(),
-    denom: "inj",
-  };
+  const subaccountId = address.getSubaccountId();
+  const indexerDerivativesApi = new IndexerGrpcDerivativesApi(
+    network.indexerApi
+  );
+  const { orders: derivativeOrders } = await indexerDerivativesApi.fetchOrders({
+    subaccountId,
+  });
+  const [derivativeOrder] = derivativeOrders;
 
-  const msg = MsgSend.fromJSON({
-    amount,
-    srcInjectiveAddress: injectiveAddress,
-    dstInjectiveAddress: injectiveAddress,
+  if (!derivativeOrder) {
+    throw new Error(
+      `The ${injectiveAddress} address doesnt have any derivative orders`
+    );
+  }
+
+  const msg = MsgBatchCancelDerivativeOrders.fromJSON({
+    injectiveAddress: injectiveAddress,
+    orders: [
+      {
+        orderMask: 1,
+        marketId: derivativeOrder.marketId,
+        subaccountId: address.getSubaccountId(),
+        orderHash: derivativeOrder.orderHash,
+      },
+    ],
   });
 
   /** Prepare the Transaction **/

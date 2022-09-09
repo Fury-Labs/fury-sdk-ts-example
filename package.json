@@ -11,12 +11,13 @@
   ],
   "scripts": {},
   "dependencies": {
-    "@injectivelabs/contracts": "^1.0.15",
-    "@injectivelabs/networks": "^1.0.7",
-    "@injectivelabs/sdk-ts": "^1.0.54",
-    "@injectivelabs/ts-types": "^1.0.5",
-    "@injectivelabs/tx-ts": "^1.0.16",
-    "dotenv": "^16.0.0"
+    "@injectivelabs/contracts": "^1.0.28",
+    "@injectivelabs/networks": "^1.0.18",
+    "@injectivelabs/sdk-ts": "^1.0.120",
+    "@injectivelabs/ts-types": "^1.0.9",
+    "@injectivelabs/tx-ts": "^1.0.37",
+    "dotenv": "^16.0.0",
+    "js-base64": "^3.7.2"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

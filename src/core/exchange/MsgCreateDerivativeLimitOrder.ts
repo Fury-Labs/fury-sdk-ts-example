@@ -1,19 +1,31 @@
 import { getNetworkInfo, Network } from "@injectivelabs/networks";
-import { ChainRestAuthApi } from "@injectivelabs/sdk-ts";
+import {
+  ChainRestAuthApi,
+  IndexerGrpcDerivativesApi,
+} from "@injectivelabs/sdk-ts";
 import { PrivateKey } from "@injectivelabs/sdk-ts/dist/local";
-import { MsgSend, DEFAULT_STD_FEE } from "@injectivelabs/sdk-ts";
+import {
+  MsgCreateDerivativeLimitOrder,
+  DEFAULT_STD_FEE,
+} from "@injectivelabs/sdk-ts";
 import { createTransaction } from "@injectivelabs/tx-ts";
 import { TxRestClient, TxClient } from "@injectivelabs/tx-ts/dist/client";
-import { BigNumberInBase } from "@injectivelabs/utils";
 import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
+import {
+  BigNumberInBase,
+  derivativeMarginToChainMarginToFixed,
+  derivativePriceToChainPriceToFixed,
+  derivativeQuantityToChainQuantityToFixed,
+} from "@injectivelabs/utils";
 
-/** MsgSend Example */
+/** MsgCreateDerivativeLimitOrder Example */
 (async () => {
   const network = getNetworkInfo(Network.TestnetK8s);
   const privateKeyHash =
     "f9db9bf330e23cb7839039e944adef6e9df447b90b503d5b4464c90bea9022f3";
   const privateKey = PrivateKey.fromPrivateKey(privateKeyHash);
   const injectiveAddress = privateKey.toBech32();
+  const address = privateKey.toAddress();
   const publicKey = privateKey.toPublicKey().toBase64();
 
   /** Account Details **/
@@ -22,15 +34,39 @@ import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
   ).fetchAccount(injectiveAddress);
 
   /** Prepare the Message */
-  const amount = {
-    amount: new BigNumberInBase(0.01).toWei().toFixed(),
-    denom: "inj",
-  };
+  const subaccountId = address.getSubaccountId();
+  const indexerDerivativesApi = new IndexerGrpcDerivativesApi(
+    network.indexerApi
+  );
+  const markets = await indexerDerivativesApi.fetchMarkets();
+  const btcUsdtMarket = markets.find((m) => m.ticker.includes("BTC"));
 
-  const msg = MsgSend.fromJSON({
-    amount,
-    srcInjectiveAddress: injectiveAddress,
-    dstInjectiveAddress: injectiveAddress,
+  if (!btcUsdtMarket) {
+    throw new Error(`The BTC/USDT PERP market not found`);
+  }
+
+  /* 1 - buy, 2 - sell, 3 - stop_buy, 4 - stop_sell, 5 - take_buy, 6 - take_sell, 7 - buy post-only, 8 - sell post-only */
+  const orderType = 1;
+  const price = 19500;
+  const leverage = 1;
+  const quantity = 0.001;
+  const margin = new BigNumberInBase(quantity).times(price).dividedBy(leverage);
+
+  const msg = MsgCreateDerivativeLimitOrder.fromJSON({
+    orderType,
+    injectiveAddress,
+    price: derivativePriceToChainPriceToFixed({
+      value: price,
+      quoteDecimals: 6 /* USDT has 6 decimals */,
+    }),
+    quantity: derivativeQuantityToChainQuantityToFixed({ value: quantity }),
+    margin: derivativeMarginToChainMarginToFixed({
+      value: margin,
+      quoteDecimals: 6 /* USDT has 6 decimals */,
+    }),
+    marketId: btcUsdtMarket.marketId,
+    feeRecipient: injectiveAddress,
+    subaccountId: subaccountId,
   });
 
   /** Prepare the Transaction **/
@@ -68,6 +104,8 @@ import { TxError } from "@injectivelabs/tx-ts/dist/types/tx-rest-client";
 
   /** Broadcast transaction */
   const txResponse = await txService.broadcast(txRaw);
+
+  console.log(txResponse);
 
   if ((txResponse as TxError).code !== 0) {
     console.log(`Transaction failed: ${txResponse.rawLog}`);
